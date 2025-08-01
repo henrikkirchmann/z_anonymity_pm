@@ -22,7 +22,7 @@ import os
 # Constants
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 #EVENT_LOG_PATH = os.path.join(SCRIPT_DIR, 'data')
-EVENT_LOG_PATH = Path(os.path.join(SCRIPT_DIR, '../data/input/')).resolve()
+EVENT_LOG_PATH = Path(os.path.join(SCRIPT_DIR, '../data/input1/')).resolve()
 
 
 def convert_to_serializable(obj):
@@ -100,13 +100,15 @@ def test_different_z_values(
             # Evaluate reidentification risk (mean), handle empty log
             if len(anonymized_log) == 0:
                 reidentification_protection = None
+                reidentification_protection_A_star = None
             else:
                 if mode == 'ngram':
                     projection = 'N'
                 else: projection = 'E'
                 reid_risk = calculate_reidentification_risk(anonymized_log, projection=projection, ngram_size=ngram_size)
                 reidentification_protection = 1- reid_risk['risk_metrics']['mean']
-            
+                reid_risk = calculate_reidentification_risk(anonymized_log, projection='A*', ngram_size=ngram_size)
+                reidentification_protection_A_star = 1- reid_risk['risk_metrics']['mean']
             # Store results
             result = {
                 'parameters': {
@@ -120,7 +122,8 @@ def test_different_z_values(
                 'anonymized_log_stats': anonymized_log_stats,
                 'ratio_of_remaining_directly_follows': ratio_of_remaining_directly_follows,
                 'fitness': fitness,
-                'reidentification_protection': reidentification_protection
+                'reidentification_protection': reidentification_protection,
+                'reidentification_protection_A_star': reidentification_protection_A_star
             }
             results.append(result)
             
@@ -144,9 +147,12 @@ def test_different_z_values(
         # Evaluate reidentification risk (mean), handle empty log
         if len(anonymized_log) == 0:
             reidentification_protection = None
+            reidentification_protection_A_star = None
         else:
             reid_risk = calculate_reidentification_risk(anonymized_log, ngram_size=ngram_size)
             reidentification_protection = 1- reid_risk['risk_metrics']['mean']
+            reid_risk = calculate_reidentification_risk(anonymized_log, projection='A*', ngram_size=ngram_size)
+            reidentification_protection_A_star = 1 - reid_risk['risk_metrics']['mean']
 
         # Store results
         result = {
@@ -161,7 +167,9 @@ def test_different_z_values(
             'anonymized_log_stats': anonymized_log_stats,
             'ratio_of_remaining_directly_follows': ratio_of_remaining_directly_follows,
             'fitness': fitness,
-            'reidentification_protection': reidentification_protection
+            'reidentification_protection': reidentification_protection,
+            'reidentification_protection_A_star': reidentification_protection_A_star
+
         }
         results.append(result)
 

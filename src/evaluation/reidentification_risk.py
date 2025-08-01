@@ -5,6 +5,8 @@ import random
 import numpy as np
 from typing import List, Any, Tuple
 from math import ceil
+from datetime import datetime
+from dateutil import parser  # ensure python-dateutil is available
 
 
 def _is_subset(small: Counter, big: Counter) -> bool:
@@ -52,7 +54,7 @@ def _sample_ngrams(ngrams: List[Tuple[Any, ...]], number_points: float, rng: ran
 
 def calculate_reidentification_risk(
     log: EventLog,
-    projection: str = 'N',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps
+    projection: str = 'N',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps, 'A*' = day-granular timestamps then treated as 'A'
     number_points: float = 5,  # >=1 absolute, <1 fraction (also governs number of n-grams in N)
     repetitions: int = 10,
     seed: int | None = None,
@@ -63,6 +65,7 @@ def calculate_reidentification_risk(
     Compute unicity (re-identification risk) under projections:
       - 'E': activities only,
       - 'A': activities + aligned timestamps,
+      - 'A*': same as 'A' but with timestamps reduced to day granularity,
       - 'N': n-gram uniqueness (sampled n-grams per trace).
     """
     if seed is not None:
@@ -78,6 +81,32 @@ def calculate_reidentification_risk(
         timestamps = [event.get('time:timestamp') for event in trace]
         traces_act.append(activities)
         traces_time.append(timestamps)
+
+    # If projection == 'A*', reduce timestamp granularity to days, then treat as 'A'
+    if projection == 'A*':
+        def reduce_to_day(ts):
+            if ts is None:
+                return None
+            # If already a datetime
+            if isinstance(ts, datetime):
+                dt = ts
+            else:
+                try:
+                    # try ISO first
+                    dt = datetime.fromisoformat(ts)
+                except Exception:
+                    dt = parser.parse(ts)
+            # Truncate to date (midnight)
+            return datetime(dt.year, dt.month, dt.day)
+
+        # Apply reduction
+        traces_time = [
+            [reduce_to_day(ts) for ts in trace_times]
+            for trace_times in traces_time
+        ]
+        projection = 'A'
+
+
 
     n_traces = len(traces_act)
     if n_traces == 0:

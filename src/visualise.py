@@ -64,6 +64,40 @@ def load_and_flatten_results(json_paths):
     return df
 
 
+def load_and_flatten_results(json_paths):
+    rows = []
+    for p in json_paths:
+        with open(p, 'r') as f:
+            raw = json.load(f)
+        for r in raw:
+            base = {
+                'anom_alg': r['parameters']['anom_alg'],
+                'z': r['parameters']['z'],
+                'time_window': r['parameters'].get('time_window'),
+                'mode': r['parameters'].get('mode'),
+                'ngram_size': r['parameters'].get('ngram_size'),
+                'explicit': r['parameters'].get('explicit'),
+                'source_file': os.path.basename(p),
+            }
+            base['ratio_of_remaining_directly_follows'] = r.get('ratio_of_remaining_directly_follows')
+            base['fitness'] = r.get('fitness')
+            # reidentification protection variants
+            if 'reidentification_protection' in r:
+                base['reidentification_protection'] = r.get('reidentification_protection')
+            elif 'reidentification_risk' in r:
+                base['reidentification_protection'] = r.get('reidentification_risk')
+            else:
+                base['reidentification_protection'] = None
+
+            base['reidentification_protection_A_star'] = r.get('reidentification_protection_A_star')
+
+            stats = r.get('anonymized_log_stats', {}) or {}
+            base['event_removal_rate'] = stats.get('event_removal_rate')
+            base['trace_removal_rate'] = stats.get('trace_removal_rate')
+            rows.append(base)
+    return pd.DataFrame(rows)
+
+
 def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
     metrics = [
         'event_removal_rate',
@@ -71,7 +105,17 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
         'ratio_of_remaining_directly_follows',
         'fitness',
         'reidentification_protection',
+        'reidentification_protection_A_star',
     ]
+    display_names = {
+        'event_removal_rate': 'Ratio of remaining events',
+        'trace_removal_rate': 'Ratio of remaining traces',
+        'ratio_of_remaining_directly_follows': 'Ratio of remaining directly follows',
+        'fitness': 'Fitness',
+        'reidentification_protection': 'Reidentification protection',
+        'reidentification_protection_A_star': 'Reidentification protection A*',
+    }
+
     df = df[df['anom_alg'].isin(['z-anonymity', 'baseline'])].copy()
 
     ngram_sizes = sorted(df['ngram_size'].dropna().unique())
@@ -99,8 +143,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
             ax = axes[i][j]
             subset_ngram = df[df['ngram_size'] == ngram]
 
-            # implicit (non-explicit) for z-anonymity: solid full; baseline only when explicit is False
-            # z-anonymity implicit
+            # implicit z-anonymity: solid full-intensity
             subset_z = subset_ngram[
                 (subset_ngram['anom_alg'] == 'z-anonymity') &
                 ((subset_ngram['explicit'] == False) | (subset_ngram['explicit'].isna()))
@@ -111,7 +154,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     x='z',
                     y=metric,
                     ax=ax,
-                    label=f"z-anonymity" if (i == 0 and j == 0) else None,
+                    label="z-anonymity" if (i == 0 and j == 0) else None,
                     linestyle='-',
                     color=metric_color[metric],
                     alpha=1.0,
@@ -119,7 +162,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     err_style=None,
                 )
 
-            # baseline implicit only (explicit must be False or None); solid, faded
+            # baseline implicit only: solid, faded
             subset_baseline = subset_ngram[
                 (subset_ngram['anom_alg'] == 'baseline') &
                 ((subset_ngram['explicit'] == False) | (subset_ngram['explicit'].isna()))
@@ -130,7 +173,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     x='z',
                     y=metric,
                     ax=ax,
-                    label=f"baseline" if (i == 0 and j == 0) else None,
+                    label="baseline" if (i == 0 and j == 0) else None,
                     linestyle='-',
                     color=metric_color[metric],
                     alpha=0.3,
@@ -138,7 +181,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     err_style=None,
                 )
 
-            # explicit: dashed lines, for z-anonymity only (baseline explicit omitted per request)
+            # explicit z-anonymity: dashed
             subset_z_explicit = subset_ngram[
                 (subset_ngram['anom_alg'] == 'z-anonymity') &
                 (subset_ngram['explicit'] == True)
@@ -149,7 +192,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     x='z',
                     y=metric,
                     ax=ax,
-                    label=f"z-anonymity explicit" if (i == 0 and j == 0) else None,
+                    label="z-anonymity explicit" if (i == 0 and j == 0) else None,
                     linestyle='--',
                     color=metric_color[metric],
                     alpha=1.0,
@@ -157,13 +200,13 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
                     err_style=None,
                 )
 
-            # vertical space padding: slightly extend beyond 0 and 1 so lines at edges are visible
+            # vertical padding so 0 and 1 lines are distinct
             ax.set_ylim(-0.02, 1.02)
 
             if i == 0:
                 ax.set_title(f"ngram_size={ngram}")
             if j == 0:
-                ax.set_ylabel(metric)
+                ax.set_ylabel(display_names.get(metric, metric))
             else:
                 ax.set_ylabel('')
             ax.set_xlabel('z')
@@ -187,6 +230,7 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
         fig.savefig(png_path, dpi=300, bbox_inches='tight', format='png')
         print(f"[INFO] Saved comparison PNG to: {png_path}")
     return fig
+
 
 
 def visualize_all_results_for_log(log_name, result_dir=None, save_png=False):
