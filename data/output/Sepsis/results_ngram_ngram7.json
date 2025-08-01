@@ -17,7 +17,8 @@
     },
     "ratio_of_remaining_directly_follows": 1.0,
     "fitness": 1.0,
-    "reidentification_protection": 0.4688382193268186
+    "reidentification_protection": 0.465472312703583,
+    "reidentification_protection_A_star": 0.47730727470141154
   },
   {
     "parameters": {
@@ -37,7 +38,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.4260869565217391,
     "fitness": 0.9408050956649581,
-    "reidentification_protection": 0.6592592592592593
+    "reidentification_protection": 0.6603174603174604,
+    "reidentification_protection_A_star": 0.14761904761904765
   },
   {
     "parameters": {
@@ -57,7 +59,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.19130434782608696,
     "fitness": 0.9679270044277057,
-    "reidentification_protection": 0.75
+    "reidentification_protection": 0.75,
+    "reidentification_protection_A_star": 0.07499999999999996
   },
   {
     "parameters": {
@@ -77,7 +80,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.09565217391304348,
     "fitness": 1.0,
-    "reidentification_protection": 0.33333333333333326
+    "reidentification_protection": 0.33333333333333326,
+    "reidentification_protection_A_star": 0.0
   },
   {
     "parameters": {
@@ -97,7 +101,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -117,7 +122,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -137,7 +143,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -157,7 +164,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -177,7 +185,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -197,7 +206,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -217,7 +227,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -237,7 +248,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -257,7 +269,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -277,7 +290,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -297,7 +311,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -317,7 +332,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -337,7 +353,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -357,7 +374,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -377,7 +395,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -397,7 +416,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -417,7 +437,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -437,7 +458,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -457,7 +479,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -477,7 +500,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -497,7 +521,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -517,7 +542,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -537,7 +563,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -557,7 +584,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -577,7 +605,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -597,7 +626,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -617,7 +647,8 @@
     },
     "ratio_of_remaining_directly_follows": 1.0,
     "fitness": 1.0,
-    "reidentification_protection": 0.46362649294245384
+    "reidentification_protection": 0.4627578718783931,
+    "reidentification_protection_A_star": 0.4859934853420196
   },
   {
     "parameters": {
@@ -637,7 +668,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7652173913043478,
     "fitness": 0.995219182087534,
-    "reidentification_protection": 0.7456497175141243
+    "reidentification_protection": 0.7447457627118644,
+    "reidentification_protection_A_star": 0.4777401129943504
   },
   {
     "parameters": {
@@ -657,7 +689,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6260869565217392,
     "fitness": 0.9924744487085746,
-    "reidentification_protection": 0.7987370838117107
+    "reidentification_protection": 0.7966704936854191,
+    "reidentification_protection_A_star": 0.46303099885189436
   },
   {
     "parameters": {
@@ -677,7 +710,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.5391304347826087,
     "fitness": 0.9905770185005847,
-    "reidentification_protection": 0.8238207547169811
+    "reidentification_protection": 0.8254716981132075,
+    "reidentification_protection_A_star": 0.45955188679245285
   },
   {
     "parameters": {
@@ -697,7 +731,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.5043478260869565,
     "fitness": 0.9881829743706732,
-    "reidentification_protection": 0.8487053020961776
+    "reidentification_protection": 0.8499383477188656,
+    "reidentification_protection_A_star": 0.43168927250308253
   },
   {
     "parameters": {
@@ -717,7 +752,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.4608695652173913,
     "fitness": 0.9882344210099222,
-    "reidentification_protection": 0.861025641025641
+    "reidentification_protection": 0.8617948717948718,
+    "reidentification_protection_A_star": 0.4123076923076924
   },
   {
     "parameters": {
@@ -737,7 +773,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.40869565217391307,
     "fitness": 0.9867569388188832,
-    "reidentification_protection": 0.8862068965517241
+    "reidentification_protection": 0.8891246684350133,
+    "reidentification_protection_A_star": 0.41312997347480107
   },
   {
     "parameters": {
@@ -757,7 +794,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.4,
     "fitness": 0.9881757704139765,
-    "reidentification_protection": 0.8860810810810811
+    "reidentification_protection": 0.8877027027027027,
+    "reidentification_protection_A_star": 0.41081081081081083
   },
   {
     "parameters": {
@@ -777,7 +815,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.391304347826087,
     "fitness": 0.9890306716636655,
-    "reidentification_protection": 0.9284299858557284
+    "reidentification_protection": 0.9294200848656294,
+    "reidentification_protection_A_star": 0.42036775106082036
   },
   {
     "parameters": {
@@ -797,7 +836,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.391304347826087,
     "fitness": 0.98615388862579,
-    "reidentification_protection": 0.935
+    "reidentification_protection": 0.9335294117647058,
+    "reidentification_protection_A_star": 0.41794117647058826
   },
   {
     "parameters": {
@@ -817,7 +857,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.3826086956521739,
     "fitness": 0.9871516155493721,
-    "reidentification_protection": 0.9358518518518518
+    "reidentification_protection": 0.9402962962962963,
+    "reidentification_protection_A_star": 0.42607407407407405
   },
   {
     "parameters": {
@@ -837,7 +878,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.3652173913043478,
     "fitness": 0.986373410410085,
-    "reidentification_protection": 0.9408132530120482
+    "reidentification_protection": 0.9450301204819277,
+    "reidentification_protection_A_star": 0.4304216867469879
   },
   {
     "parameters": {
@@ -857,7 +899,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.3652173913043478,
     "fitness": 0.9867619471034862,
-    "reidentification_protection": 0.943939393939394
+    "reidentification_protection": 0.943030303030303,
+    "reidentification_protection_A_star": 0.4401515151515152
   },
   {
     "parameters": {
@@ -877,7 +920,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.3391304347826087,
     "fitness": 0.9867646295918255,
-    "reidentification_protection": 0.9409235668789809
+    "reidentification_protection": 0.9380573248407643,
+    "reidentification_protection_A_star": 0.4304140127388536
   },
   {
     "parameters": {
@@ -897,7 +941,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.30434782608695654,
     "fitness": 0.9876164648531344,
-    "reidentification_protection": 0.9421140939597316
+    "reidentification_protection": 0.9395973154362416,
+    "reidentification_protection_A_star": 0.4286912751677854
   },
   {
     "parameters": {
@@ -917,7 +962,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.2956521739130435,
     "fitness": 0.9865101057306521,
-    "reidentification_protection": 0.9447971781305115
+    "reidentification_protection": 0.9428571428571428,
+    "reidentification_protection_A_star": 0.407583774250441
   },
   {
     "parameters": {
@@ -937,7 +983,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.2782608695652174,
     "fitness": 0.9831451903288092,
-    "reidentification_protection": 0.958739837398374
+    "reidentification_protection": 0.957520325203252,
+    "reidentification_protection_A_star": 0.3705284552845528
   },
   {
     "parameters": {
@@ -957,7 +1004,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.2782608695652174,
     "fitness": 0.9829854848198601,
-    "reidentification_protection": 0.9579281183932347
+    "reidentification_protection": 0.9579281183932347,
+    "reidentification_protection_A_star": 0.36236786469344606
   },
   {
     "parameters": {
@@ -977,7 +1025,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.26956521739130435,
     "fitness": 0.9832128118303268,
-    "reidentification_protection": 0.963495575221239
+    "reidentification_protection": 0.9661504424778761,
+    "reidentification_protection_A_star": 0.3619469026548673
   },
   {
     "parameters": {
@@ -997,7 +1046,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.2608695652173913,
     "fitness": 0.9850194491921421,
-    "reidentification_protection": 0.9809417040358744
+    "reidentification_protection": 0.9816143497757848,
+    "reidentification_protection_A_star": 0.3710762331838564
   },
   {
     "parameters": {
@@ -1017,7 +1067,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.21739130434782608,
     "fitness": 0.9834654406051306,
-    "reidentification_protection": 0.9785185185185186
+    "reidentification_protection": 0.980246913580247,
+    "reidentification_protection_A_star": 0.3523456790123456
   },
   {
     "parameters": {
@@ -1037,7 +1088,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.22608695652173913,
     "fitness": 0.9832742356804919,
-    "reidentification_protection": 0.9839506172839506
+    "reidentification_protection": 0.9832098765432099,
+    "reidentification_protection_A_star": 0.34518518518518504
   },
   {
     "parameters": {
@@ -1057,7 +1109,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.22608695652173913,
     "fitness": 0.9839558653892555,
-    "reidentification_protection": 0.9825870646766169
+    "reidentification_protection": 0.9828358208955223,
+    "reidentification_protection_A_star": 0.35671641791044784
   },
   {
     "parameters": {
@@ -1077,7 +1130,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.2,
     "fitness": 0.9819781240634214,
-    "reidentification_protection": 0.9803370786516854
+    "reidentification_protection": 0.9806179775280899,
+    "reidentification_protection_A_star": 0.34353932584269664
   },
   {
     "parameters": {
@@ -1097,7 +1151,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.19130434782608696,
     "fitness": 0.9802321674048668,
-    "reidentification_protection": 0.9804804804804805
+    "reidentification_protection": 0.9801801801801802,
+    "reidentification_protection_A_star": 0.3516516516516517
   },
   {
     "parameters": {
@@ -1117,7 +1172,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.17391304347826086,
     "fitness": 0.9812718750139563,
-    "reidentification_protection": 0.9869696969696969
+    "reidentification_protection": 0.9875757575757576,
+    "reidentification_protection_A_star": 0.3518181818181818
   },
   {
     "parameters": {
@@ -1137,7 +1193,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.1391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.41638225255972694
   },
   {
     "parameters": {
@@ -1157,7 +1214,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.1391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.4150170648464163
   },
   {
     "parameters": {
@@ -1177,7 +1235,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.1391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.4081911262798634
   },
   {
     "parameters": {
@@ -1197,6 +1256,7 @@
     },
     "ratio_of_remaining_directly_follows": 0.1391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.4156996587030717
   }
 ]

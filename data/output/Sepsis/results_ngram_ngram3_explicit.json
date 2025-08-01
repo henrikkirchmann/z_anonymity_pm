@@ -17,7 +17,8 @@
     },
     "ratio_of_remaining_directly_follows": 1.0,
     "fitness": 1.0,
-    "reidentification_protection": 0.9648571428571429
+    "reidentification_protection": 0.9625714285714285,
+    "reidentification_protection_A_star": 0.5453333333333333
   },
   {
     "parameters": {
@@ -37,7 +38,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6608695652173913,
     "fitness": 0.9825740033834237,
-    "reidentification_protection": 0.9796135265700483
+    "reidentification_protection": 0.9806763285024155,
+    "reidentification_protection_A_star": 0.516231884057971
   },
   {
     "parameters": {
@@ -57,7 +59,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.48695652173913045,
     "fitness": 0.9710764572903569,
-    "reidentification_protection": 0.9823529411764705
+    "reidentification_protection": 0.981555333998006,
+    "reidentification_protection_A_star": 0.4777666999002992
   },
   {
     "parameters": {
@@ -77,7 +80,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.41739130434782606,
     "fitness": 0.9696642782892952,
-    "reidentification_protection": 0.9814389989572472
+    "reidentification_protection": 0.9819603753910323,
+    "reidentification_protection_A_star": 0.47320125130344104
   },
   {
     "parameters": {
@@ -97,7 +101,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.3391304347826087,
     "fitness": 0.9651207504245882,
-    "reidentification_protection": 0.9892497200447928
+    "reidentification_protection": 0.9879059350503919,
+    "reidentification_protection_A_star": 0.5257558790593505
   },
   {
     "parameters": {
@@ -117,7 +122,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.24347826086956523,
     "fitness": 0.9751793847498703,
-    "reidentification_protection": 0.9919480519480519
+    "reidentification_protection": 0.9920779220779221,
+    "reidentification_protection_A_star": 0.607012987012987
   },
   {
     "parameters": {
@@ -137,7 +143,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.1826086956521739,
     "fitness": 0.9774250186756838,
-    "reidentification_protection": 0.9882800608828006
+    "reidentification_protection": 0.9885844748858448,
+    "reidentification_protection_A_star": 0.6986301369863014
   },
   {
     "parameters": {
@@ -157,7 +164,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.09565217391304348,
     "fitness": 0.9844956595057412,
-    "reidentification_protection": 0.9980582524271845
+    "reidentification_protection": 0.9974757281553398,
+    "reidentification_protection_A_star": 0.7755339805825243
   },
   {
     "parameters": {
@@ -177,7 +185,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.06956521739130435,
     "fitness": 0.9924559907868566,
-    "reidentification_protection": 0.9982456140350877
+    "reidentification_protection": 0.9982456140350877,
+    "reidentification_protection_A_star": 0.8729323308270677
   },
   {
     "parameters": {
@@ -197,7 +206,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.929368029739777
   },
   {
     "parameters": {
@@ -217,7 +227,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.9542857142857143
   },
   {
     "parameters": {
@@ -237,7 +248,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.9298245614035088
   },
   {
     "parameters": {
@@ -257,7 +269,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.935483870967742
   },
   {
     "parameters": {
@@ -277,7 +290,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 0.967741935483871
   },
   {
     "parameters": {
@@ -297,7 +311,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.017391304347826087,
     "fitness": 1.0,
-    "reidentification_protection": 1.0
+    "reidentification_protection": 1.0,
+    "reidentification_protection_A_star": 1.0
   },
   {
     "parameters": {
@@ -317,7 +332,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -337,7 +353,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -357,7 +374,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -377,7 +395,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -397,7 +416,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -417,7 +437,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -437,7 +458,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -457,7 +479,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -477,7 +500,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -497,7 +521,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -517,7 +542,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -537,7 +563,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -557,7 +584,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -577,7 +605,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -597,7 +626,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.0,
     "fitness": null,
-    "reidentification_protection": null
+    "reidentification_protection": null,
+    "reidentification_protection_A_star": null
   },
   {
     "parameters": {
@@ -617,7 +647,8 @@
     },
     "ratio_of_remaining_directly_follows": 1.0,
     "fitness": 1.0,
-    "reidentification_protection": 0.9641904761904762
+    "reidentification_protection": 0.9658095238095238,
+    "reidentification_protection_A_star": 0.546
   },
   {
     "parameters": {
@@ -637,7 +668,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.8695652173913043,
     "fitness": 1.0,
-    "reidentification_protection": 0.9778095238095238
+    "reidentification_protection": 0.9766666666666667,
+    "reidentification_protection_A_star": 0.5495238095238095
   },
   {
     "parameters": {
@@ -657,7 +689,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.8521739130434782,
     "fitness": 0.999401296416237,
-    "reidentification_protection": 0.9725714285714285
+    "reidentification_protection": 0.9742857142857143,
+    "reidentification_protection_A_star": 0.5471428571428572
   },
   {
     "parameters": {
@@ -677,7 +710,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.8347826086956521,
     "fitness": 0.9988206494036357,
-    "reidentification_protection": 0.9739047619047619
+    "reidentification_protection": 0.9718095238095238,
+    "reidentification_protection_A_star": 0.5486666666666666
   },
   {
     "parameters": {
@@ -697,7 +731,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.8173913043478261,
     "fitness": 0.9985996144210806,
-    "reidentification_protection": 0.9762857142857143
+    "reidentification_protection": 0.9754285714285714,
+    "reidentification_protection_A_star": 0.5532380952380953
   },
   {
     "parameters": {
@@ -717,7 +752,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7739130434782608,
     "fitness": 0.9980184597716899,
-    "reidentification_protection": 0.9751428571428571
+    "reidentification_protection": 0.9767619047619047,
+    "reidentification_protection_A_star": 0.5486666666666666
   },
   {
     "parameters": {
@@ -737,7 +773,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7652173913043478,
     "fitness": 0.9980184597716899,
-    "reidentification_protection": 0.9746666666666667
+    "reidentification_protection": 0.9748571428571429,
+    "reidentification_protection_A_star": 0.5555238095238095
   },
   {
     "parameters": {
@@ -757,7 +794,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7565217391304347,
     "fitness": 0.9972927267787594,
-    "reidentification_protection": 0.9764761904761905
+    "reidentification_protection": 0.9765714285714285,
+    "reidentification_protection_A_star": 0.549047619047619
   },
   {
     "parameters": {
@@ -777,7 +815,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7478260869565218,
     "fitness": 0.9972963243716426,
-    "reidentification_protection": 0.9759047619047619
+    "reidentification_protection": 0.9741904761904762,
+    "reidentification_protection_A_star": 0.5496190476190476
   },
   {
     "parameters": {
@@ -797,7 +836,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7304347826086957,
     "fitness": 0.9962170983635389,
-    "reidentification_protection": 0.975047619047619
+    "reidentification_protection": 0.9758095238095238,
+    "reidentification_protection_A_star": 0.5471428571428572
   },
   {
     "parameters": {
@@ -817,7 +857,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.7130434782608696,
     "fitness": 0.9957327004078772,
-    "reidentification_protection": 0.9749523809523809
+    "reidentification_protection": 0.9763809523809523,
+    "reidentification_protection_A_star": 0.5487619047619047
   },
   {
     "parameters": {
@@ -837,7 +878,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6956521739130435,
     "fitness": 0.995784049666102,
-    "reidentification_protection": 0.9746425166825549
+    "reidentification_protection": 0.9758817921830315,
+    "reidentification_protection_A_star": 0.5511916110581507
   },
   {
     "parameters": {
@@ -857,7 +899,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6869565217391305,
     "fitness": 0.9956676310959186,
-    "reidentification_protection": 0.9779790276453766
+    "reidentification_protection": 0.9785510009532888,
+    "reidentification_protection_A_star": 0.5531935176358437
   },
   {
     "parameters": {
@@ -877,7 +920,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6869565217391305,
     "fitness": 0.9956187684631166,
-    "reidentification_protection": 0.9755004766444233
+    "reidentification_protection": 0.9758817921830315,
+    "reidentification_protection_A_star": 0.5521448999046712
   },
   {
     "parameters": {
@@ -897,7 +941,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6695652173913044,
     "fitness": 0.9950540721611456,
-    "reidentification_protection": 0.9745471877979027
+    "reidentification_protection": 0.9761677788369876,
+    "reidentification_protection_A_star": 0.551858913250715
   },
   {
     "parameters": {
@@ -917,7 +962,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6608695652173913,
     "fitness": 0.9948931004147005,
-    "reidentification_protection": 0.9742366412213741
+    "reidentification_protection": 0.9759541984732825,
+    "reidentification_protection_A_star": 0.5476145038167939
   },
   {
     "parameters": {
@@ -937,7 +983,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6608695652173913,
     "fitness": 0.9948256919699335,
-    "reidentification_protection": 0.9777671755725191
+    "reidentification_protection": 0.9759541984732825,
+    "reidentification_protection_A_star": 0.5491412213740458
   },
   {
     "parameters": {
@@ -957,7 +1004,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6521739130434783,
     "fitness": 0.994846062791831,
-    "reidentification_protection": 0.9743320610687023
+    "reidentification_protection": 0.9744274809160305,
+    "reidentification_protection_A_star": 0.5478053435114504
   },
   {
     "parameters": {
@@ -977,7 +1025,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6434782608695652,
     "fitness": 0.9948003917537935,
-    "reidentification_protection": 0.9779580152671756
+    "reidentification_protection": 0.9777671755725191,
+    "reidentification_protection_A_star": 0.55
   },
   {
     "parameters": {
@@ -997,7 +1046,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6434782608695652,
     "fitness": 0.9947994894384522,
-    "reidentification_protection": 0.976526717557252
+    "reidentification_protection": 0.9782442748091603,
+    "reidentification_protection_A_star": 0.5547709923664124
   },
   {
     "parameters": {
@@ -1017,7 +1067,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6347826086956522,
     "fitness": 0.9937991042090685,
-    "reidentification_protection": 0.9778625954198473
+    "reidentification_protection": 0.9779580152671756,
+    "reidentification_protection_A_star": 0.5411259541984733
   },
   {
     "parameters": {
@@ -1037,7 +1088,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6260869565217392,
     "fitness": 0.9937730936245585,
-    "reidentification_protection": 0.9778625954198473
+    "reidentification_protection": 0.9787213740458015,
+    "reidentification_protection_A_star": 0.5376908396946565
   },
   {
     "parameters": {
@@ -1057,7 +1109,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6173913043478261,
     "fitness": 0.9936565242443515,
-    "reidentification_protection": 0.9791030534351145
+    "reidentification_protection": 0.9807251908396947,
+    "reidentification_protection_A_star": 0.5367366412213741
   },
   {
     "parameters": {
@@ -1077,7 +1130,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6173913043478261,
     "fitness": 0.9936565242443515,
-    "reidentification_protection": 0.980057251908397
+    "reidentification_protection": 0.9809160305343512,
+    "reidentification_protection_A_star": 0.5378816793893131
   },
   {
     "parameters": {
@@ -1097,7 +1151,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6173913043478261,
     "fitness": 0.9936565242443515,
-    "reidentification_protection": 0.9808206106870229
+    "reidentification_protection": 0.9817748091603054,
+    "reidentification_protection_A_star": 0.5325381679389313
   },
   {
     "parameters": {
@@ -1117,7 +1172,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.6173913043478261,
     "fitness": 0.9936565242443515,
-    "reidentification_protection": 0.978912213740458
+    "reidentification_protection": 0.9798664122137405,
+    "reidentification_protection_A_star": 0.5354961832061068
   },
   {
     "parameters": {
@@ -1137,7 +1193,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.5565217391304348,
     "fitness": 0.9905205236857164,
-    "reidentification_protection": 0.9869274809160306
+    "reidentification_protection": 0.9845419847328244,
+    "reidentification_protection_A_star": 0.5331106870229008
   },
   {
     "parameters": {
@@ -1157,7 +1214,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.5565217391304348,
     "fitness": 0.990518439741156,
-    "reidentification_protection": 0.9858778625954199
+    "reidentification_protection": 0.9854007633587786,
+    "reidentification_protection_A_star": 0.5309160305343512
   },
   {
     "parameters": {
@@ -1177,7 +1235,8 @@
     },
     "ratio_of_remaining_directly_follows": 0.5130434782608696,
     "fitness": 0.9900086854856704,
-    "reidentification_protection": 0.9843511450381679
+    "reidentification_protection": 0.9854007633587786,
+    "reidentification_protection_A_star": 0.5467557251908397
   },
   {
     "parameters": {
@@ -1197,6 +1256,7 @@
     },
     "ratio_of_remaining_directly_follows": 0.5130434782608696,
     "fitness": 0.9900086854856704,
-    "reidentification_protection": 0.9837786259541985
+    "reidentification_protection": 0.982442748091603,
+    "reidentification_protection_A_star": 0.5387404580152673
   }
 ]
