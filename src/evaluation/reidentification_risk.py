@@ -52,9 +52,86 @@ def _sample_ngrams(ngrams: List[Tuple[Any, ...]], number_points: float, rng: ran
         return rng.sample(ngrams, k)
 
 
+def _list_is_subset(small_list, big_list):
+    # frequency-aware subset check like unicity_activites.check_subset
+    if not all(elem in big_list for elem in small_list):
+        return False
+    big_vals, big_counts = np.unique(big_list, return_counts=True)
+    small_vals, small_counts = np.unique(small_list, return_counts=True)
+    for val, cnt in zip(small_vals, small_counts):
+        matches = np.where(big_vals == val)[0]
+        if len(matches) == 0:
+            return False
+        if big_counts[matches[0]] < cnt:
+            return False
+    return True
+
+
+def detailed_counts_projection_A(traces_act, traces_time, number_points, seed=None):
+    """
+    List-based projection A (activities + timestamps) in the style of unicity_activites.py.
+    Returns per-trace match counts, uniqueness flags, and overall unicity fraction.
+    number_points: absolute integer count of points to sample per trace.
+    """
+    if seed is not None:
+        random.seed(seed)
+
+    n_traces = len(traces_act)
+    sampled_patterns = []
+
+    # Sample indices per trace using absolute number_points
+    for i in range(n_traces):
+        acts = traces_act[i]
+        ts = traces_time[i]
+        trace_len = len(acts)
+        if trace_len == 0:
+            idxs = []
+        else:
+            k = int(number_points)
+            if trace_len <= k:
+                idxs = list(range(trace_len))
+            else:
+                idxs = random.sample(list(range(trace_len)), k)
+
+        sampled_act = [acts[j] for j in idxs if j < len(acts) and acts[j] is not None]
+        sampled_ts = [ts[j] for j in idxs if j < len(ts) and ts[j] is not None]
+        sampled_patterns.append({'activity': sampled_act, 'timestamp': sampled_ts})
+
+    per_trace = []
+    uniques = 0
+    for i, pat in enumerate(sampled_patterns):
+        match_count = 0
+        matched_indices = []
+        for j in range(n_traces):
+            full_act = [a for a in traces_act[j] if a is not None]
+            if not _list_is_subset(pat['activity'], full_act):
+                continue
+            full_ts = [t for t in traces_time[j] if t is not None]
+            if not _list_is_subset(pat['timestamp'], full_ts):
+                continue
+            match_count += 1
+            matched_indices.append(j)
+        is_unique = (match_count == 1)
+        if is_unique:
+            uniques += 1
+        per_trace.append({
+            "sampled_activity": pat['activity'],
+            "sampled_timestamp": pat['timestamp'],
+            "match_count": match_count,
+            "is_unique": is_unique,
+            "matched_trace_indices": matched_indices,
+        })
+
+    unicity_fraction = uniques / n_traces if n_traces > 0 else 0.0
+    return {
+        "per_trace": per_trace,
+        "unicity_fraction": unicity_fraction,
+    }
+
+
 def calculate_reidentification_risk(
     log: EventLog,
-    projection: str = 'N',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps, 'A*' = day-granular timestamps then treated as 'A'
+    projection: str = 'N',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps, 'A_list' = list-based A, 'A*'/'A_list*' = day-granular variants
     number_points: float = 5,  # >=1 absolute, <1 fraction (also governs number of n-grams in N)
     repetitions: int = 10,
     seed: int | None = None,
@@ -64,10 +141,32 @@ def calculate_reidentification_risk(
     """
     Compute unicity (re-identification risk) under projections:
       - 'E': activities only,
-      - 'A': activities + aligned timestamps,
-      - 'A*': same as 'A' but with timestamps reduced to day granularity,
+      - 'A': activities + aligned timestamps (Counter-based),
+      - 'A_list': activities + timestamps using list-based subset logic (unicity_activites style),
+      - 'A*' / 'A_list*': same as 'A' / 'A_list' but with timestamps reduced to day granularity,
       - 'N': n-gram uniqueness (sampled n-grams per trace).
     """
+    # Normalize projection variants
+    use_list_based = False
+    if projection.endswith('*'):
+        use_day_granular = True
+        base_proj = projection[:-1]
+    else:
+        use_day_granular = False
+        base_proj = projection
+
+    if base_proj == 'A_list':
+        use_list_based = True
+        norm_projection = 'A_list'
+    elif base_proj == 'A':
+        norm_projection = 'A'
+    elif base_proj == 'E':
+        norm_projection = 'E'
+    elif base_proj == 'N':
+        norm_projection = 'N'
+    else:
+        raise ValueError(f"Unknown projection: {projection}")
+
     if seed is not None:
         random.seed(seed)
         np.random.seed(seed)
@@ -82,43 +181,37 @@ def calculate_reidentification_risk(
         traces_act.append(activities)
         traces_time.append(timestamps)
 
-    # If projection == 'A*', reduce timestamp granularity to days, then treat as 'A'
-    if projection == 'A*':
+    # Handle day-granular reduction if requested
+    if use_day_granular:
         def reduce_to_day(ts):
             if ts is None:
                 return None
-            # If already a datetime
             if isinstance(ts, datetime):
                 dt = ts
             else:
                 try:
-                    # try ISO first
                     dt = datetime.fromisoformat(ts)
                 except Exception:
                     dt = parser.parse(ts)
-            # Truncate to date (midnight)
             return datetime(dt.year, dt.month, dt.day)
 
-        # Apply reduction
         traces_time = [
             [reduce_to_day(ts) for ts in trace_times]
             for trace_times in traces_time
         ]
-        projection = 'A'
-
-
+        # keep norm_projection as 'A' or 'A_list' depending on original
 
     n_traces = len(traces_act)
     if n_traces == 0:
-        key = f'{projection}_{ngram_size}_{number_points}_points' if projection == 'N' else f'{projection}_{number_points}_points'
+        key = f'{norm_projection}_{ngram_size}_{number_points}_points' if norm_projection == 'N' else f'{norm_projection}_{number_points}_points'
         return {
             'parameters': {
                 'projection': projection,
-                'number_points': number_points if projection in ('A', 'E') else None,
+                'number_points': number_points if norm_projection in ('A', 'E', 'A_list') else None,
                 'repetitions': repetitions,
                 'seed': seed,
                 'n_jobs': n_jobs,
-                'ngram_size': ngram_size if projection == 'N' else None
+                'ngram_size': ngram_size if norm_projection == 'N' else None
             },
             'risk_metrics': {
                 key: {
@@ -126,17 +219,16 @@ def calculate_reidentification_risk(
                     'std': 0.0,
                     'min': 0.0,
                     'max': 0.0,
-                    'individual_runs': [0.0] * (repetitions if projection != 'N' else 1)
+                    'individual_runs': [0.0] * (repetitions if norm_projection != 'N' else 1)
                 }
             }
         }
 
-    # Precompute full counters for activity and timestamp (for A/E logic)
+    # Precompute full counters for activity and timestamp (for Counter-based A/E)
     full_counter_activity = [Counter([a for a in acts if a is not None]) for acts in traces_act]
-    if projection == 'A':
+    full_counter_timestamp = None
+    if norm_projection == 'A':
         full_counter_timestamp = [Counter([t for t in times if t is not None]) for times in traces_time]
-    else:
-        full_counter_timestamp = None
 
     def _single_rep_AE(rep_idx: int) -> float:
         rng = random.Random(base_rng.randint(0, 2**30 - 1) + rep_idx)
@@ -152,7 +244,7 @@ def calculate_reidentification_risk(
             sampled_act = Counter([acts[j] for j in idxs if j < len(acts) and acts[j] is not None])
             pattern = {'activity': sampled_act}
 
-            if projection == 'A':
+            if norm_projection in ('A',):
                 sampled_ts = Counter([ts[j] for j in idxs if j < len(ts) and ts[j] is not None])
                 pattern['timestamp'] = sampled_ts
 
@@ -163,7 +255,7 @@ def calculate_reidentification_risk(
         for i, pat in enumerate(sampled_patterns):
             key = (
                 tuple(sorted(pat['activity'].items())),
-                tuple(sorted(pat['timestamp'].items())) if projection == 'A' else None
+                tuple(sorted(pat['timestamp'].items())) if norm_projection == 'A' else None
             )
             if key in memo:
                 uniques += memo[key]
@@ -173,7 +265,7 @@ def calculate_reidentification_risk(
             for j in range(n_traces):
                 if not _is_subset(pat['activity'], full_counter_activity[j]):
                     continue
-                if projection == 'A':
+                if norm_projection == 'A':
                     if not _is_subset(pat['timestamp'], full_counter_timestamp[j]):
                         continue
                 match_count += 1
@@ -220,40 +312,85 @@ def calculate_reidentification_risk(
                 uniques += 1
         return uniques / n_traces
 
-    # Dispatch runs
-    if projection == 'N':
-        # repetitions apply because sampling of which n-grams is randomized
+    # Dispatch logic
+    if norm_projection == 'N':
         if n_jobs == 1:
             results = [_single_rep_N(i) for i in range(repetitions)]
         else:
             with ThreadPoolExecutor(max_workers=n_jobs) as ex:
                 results = list(ex.map(_single_rep_N, range(repetitions)))
         metric_key = f'N_{ngram_size}_{number_points}_points'
-    else:
-        if n_jobs == 1:
-            results = [_single_rep_AE(i) for i in range(repetitions)]
-        else:
-            with ThreadPoolExecutor(max_workers=n_jobs) as ex:
-                results = list(ex.map(_single_rep_AE, range(repetitions)))
-        metric_key = f'{projection}_{number_points}_points'
+        arr = np.array(results)
+        return {
+            'parameters': {
+                'projection': projection,
+                'number_points': None,
+                'repetitions': repetitions,
+                'seed': seed,
+                'n_jobs': n_jobs,
+                'ngram_size': ngram_size
+            },
+            'risk_metrics': {
+                'mean': float(arr.mean()),
+                'std': float(arr.std(ddof=0)) if len(arr) > 1 else 0.0,
+                'min': float(arr.min()),
+                'max': float(arr.max()),
+                'individual_runs': [float(x) for x in results],
+            }
+        }
 
+    if norm_projection == 'A_list':
+        # Compute absolute number of points analogous to unicity_activites logic
+        max_len = max(len(t) for t in traces_act) if traces_act else 0
+        if number_points <= 1:
+            abs_points = ceil(number_points * max_len)
+        else:
+            abs_points = int(number_points)
+
+        # Single draw to mirror original behavior
+        detailed = detailed_counts_projection_A(traces_act, traces_time, abs_points, seed=seed)
+        unicity_fraction = detailed["unicity_fraction"]
+        return {
+            'parameters': {
+                'projection': projection,
+                'number_points': number_points,
+                'repetitions': 1,
+                'seed': seed,
+                'n_jobs': 1,
+                'ngram_size': None
+            },
+            'risk_metrics': {
+                'mean': unicity_fraction,
+                'std': 0.0,
+                'min': unicity_fraction,
+                'max': unicity_fraction,
+                'individual_runs': [unicity_fraction],
+                'per_trace': detailed['per_trace'],
+            }
+        }
+
+    # Standard 'A' or 'E' (Counter-based)
+    if n_jobs == 1:
+        results = [_single_rep_AE(i) for i in range(repetitions)]
+    else:
+        with ThreadPoolExecutor(max_workers=n_jobs) as ex:
+            results = list(ex.map(_single_rep_AE, range(repetitions)))
     arr = np.array(results)
+    metric_key = f'{norm_projection}_{number_points}_points'
     return {
         'parameters': {
             'projection': projection,
-            'number_points': number_points if projection in ('A', 'E') else None,
+            'number_points': number_points if norm_projection in ('A', 'E', 'A_list') else None,
             'repetitions': repetitions,
             'seed': seed,
-            'n_jobs': n_jobs if projection in ('A', 'E', 'N') else None,
-            'ngram_size': ngram_size if projection == 'N' else None
+            'n_jobs': n_jobs,
+            'ngram_size': ngram_size if norm_projection == 'N' else None
         },
         'risk_metrics': {
-
             'mean': float(arr.mean()),
             'std': float(arr.std(ddof=0)) if len(arr) > 1 else 0.0,
             'min': float(arr.min()),
             'max': float(arr.max()),
             'individual_runs': [float(x) for x in results],
-
         }
     }

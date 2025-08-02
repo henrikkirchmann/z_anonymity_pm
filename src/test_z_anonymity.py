@@ -120,7 +120,7 @@ def _run_single_task(args):
             reidentification_protection = 1 - reid_risk['risk_metrics']['mean']
 
         reid_risk_A_star = calculate_reidentification_risk(
-            anonymized_log, projection='A*', ngram_size=ngram_size, seed=seed
+            anonymized_log, projection='A_list*', ngram_size=ngram_size, seed=seed
         )
         reidentification_protection_A_star = 1 - reid_risk_A_star['risk_metrics']['mean']
 
