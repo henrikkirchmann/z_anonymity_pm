@@ -8,6 +8,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import Line2D
 
 # Try to import canonical OUTPUT_DIR from your definitions; fallback if not available.
 try:
@@ -27,13 +28,13 @@ except Exception:  # pragma: no cover
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def get_figure_output_path(log_name: str, filename: str) -> pathlib.Path:
-    fig_dir = OUTPUT_DIR / "figures" / log_name
+def get_figure_output_path(aggregate_name: str, filename: str) -> pathlib.Path:
+    fig_dir = OUTPUT_DIR / "figures" / aggregate_name
     fig_dir.mkdir(parents=True, exist_ok=True)
     return fig_dir / filename
 
 
-def load_and_flatten_results(json_paths):
+def load_and_flatten_results(json_paths, log_name):
     rows = []
     for p in json_paths:
         with open(p, 'r') as f:
@@ -47,6 +48,7 @@ def load_and_flatten_results(json_paths):
                 'ngram_size': r['parameters'].get('ngram_size'),
                 'explicit': r['parameters'].get('explicit'),
                 'source_file': os.path.basename(p),
+                'log_name': log_name,
             }
             base['ratio_of_remaining_directly_follows'] = r.get('ratio_of_remaining_directly_follows')
             base['fitness'] = r.get('fitness')
@@ -56,39 +58,6 @@ def load_and_flatten_results(json_paths):
                 base['reidentification_protection'] = r.get('reidentification_risk')
             else:
                 base['reidentification_protection'] = None
-            stats = r.get('anonymized_log_stats', {}) or {}
-            base['event_removal_rate'] = stats.get('event_removal_rate')
-            base['trace_removal_rate'] = stats.get('trace_removal_rate')
-            rows.append(base)
-    df = pd.DataFrame(rows)
-    return df
-
-
-def load_and_flatten_results(json_paths):
-    rows = []
-    for p in json_paths:
-        with open(p, 'r') as f:
-            raw = json.load(f)
-        for r in raw:
-            base = {
-                'anom_alg': r['parameters']['anom_alg'],
-                'z': r['parameters']['z'],
-                'time_window': r['parameters'].get('time_window'),
-                'mode': r['parameters'].get('mode'),
-                'ngram_size': r['parameters'].get('ngram_size'),
-                'explicit': r['parameters'].get('explicit'),
-                'source_file': os.path.basename(p),
-            }
-            base['ratio_of_remaining_directly_follows'] = r.get('ratio_of_remaining_directly_follows')
-            base['fitness'] = r.get('fitness')
-            # reidentification protection variants
-            if 'reidentification_protection' in r:
-                base['reidentification_protection'] = r.get('reidentification_protection')
-            elif 'reidentification_risk' in r:
-                base['reidentification_protection'] = r.get('reidentification_risk')
-            else:
-                base['reidentification_protection'] = None
-
 
             stats = r.get('anonymized_log_stats', {}) or {}
             base['event_removal_rate'] = stats.get('event_removal_rate')
@@ -97,7 +66,22 @@ def load_and_flatten_results(json_paths):
     return pd.DataFrame(rows)
 
 
-def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
+def _wrap_label(text, max_len=16):
+    if len(text) <= max_len:
+        return text
+    parts = text.split(' ')
+    if len(parts) == 1:
+        return text
+    for i in range(1, len(parts)):
+        left = ' '.join(parts[:i])
+        right = ' '.join(parts[i:])
+        if abs(len(left) - len(right)) <= max_len / 2:
+            return f"{left}\n{right}"
+    mid = len(parts) // 2
+    return f"{' '.join(parts[:mid])}\n{' '.join(parts[mid:])}"
+
+
+def plot_z_vs_baseline_and_save(df, aggregate_name, save_png=False):
     metrics = [
         'event_removal_rate',
         'trace_removal_rate',
@@ -117,8 +101,10 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
 
     ngram_sizes = sorted(df['ngram_size'].dropna().unique())
     if not ngram_sizes:
-        raise ValueError(f"No ngram_size values found in the dataframe for log '{log_name}'.")
+        raise ValueError(f"No ngram_size values found in the dataframe for '{aggregate_name}'.")
 
+    # preserve insertion order of logs by not sorting
+    log_names = list(dict.fromkeys(df['log_name'].tolist()))
     n_metrics = len(metrics)
     n_cols = len(ngram_sizes)
     fig, axes = plt.subplots(
@@ -132,129 +118,157 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
     if n_cols == 1:
         axes = np.expand_dims(axes, 1)
 
-    palette = sns.color_palette(n_colors=n_metrics)
-    metric_color = {m: palette[i] for i, m in enumerate(metrics)}
+    # color per log
+    palette = sns.color_palette(n_colors=len(log_names))
+    log_color = {log: palette[i] for i, log in enumerate(log_names)}
 
     for i, metric in enumerate(metrics):
         for j, ngram in enumerate(ngram_sizes):
             ax = axes[i][j]
             subset_ngram = df[df['ngram_size'] == ngram]
 
-            # implicit z-anonymity: solid full-intensity
-            subset_z = subset_ngram[
-                (subset_ngram['anom_alg'] == 'z-anonymity') &
-                ((subset_ngram['explicit'] == False) | (subset_ngram['explicit'].isna()))
-            ]
-            if not subset_z.empty:
-                sns.lineplot(
-                    data=subset_z.sort_values('z'),
-                    x='z',
-                    y=metric,
-                    ax=ax,
-                    label="z-anonymity" if (i == 0 and j == 0) else None,
-                    linestyle='-',
-                    color=metric_color[metric],
-                    alpha=1.0,
-                    marker=None,
-                    err_style=None,
-                )
+            for log in log_names:
+                subset_log = subset_ngram[subset_ngram['log_name'] == log]
+                if subset_log.empty:
+                    continue
 
-            # baseline implicit only: solid, faded
-            subset_baseline = subset_ngram[
-                (subset_ngram['anom_alg'] == 'baseline') &
-                ((subset_ngram['explicit'] == False) | (subset_ngram['explicit'].isna()))
-            ]
-            if not subset_baseline.empty:
-                sns.lineplot(
-                    data=subset_baseline.sort_values('z'),
-                    x='z',
-                    y=metric,
-                    ax=ax,
-                    label="baseline" if (i == 0 and j == 0) else None,
-                    linestyle='-',
-                    color=metric_color[metric],
-                    alpha=0.3,
-                    marker=None,
-                    err_style=None,
-                )
+                color = log_color[log]
 
-            # explicit z-anonymity: dashed
-            subset_z_explicit = subset_ngram[
-                (subset_ngram['anom_alg'] == 'z-anonymity') &
-                (subset_ngram['explicit'] == True)
-            ]
-            if not subset_z_explicit.empty:
-                sns.lineplot(
-                    data=subset_z_explicit.sort_values('z'),
-                    x='z',
-                    y=metric,
-                    ax=ax,
-                    label="z-anonymity explicit" if (i == 0 and j == 0) else None,
-                    linestyle='--',
-                    color=metric_color[metric],
-                    alpha=1.0,
-                    marker=None,
-                    err_style=None,
-                )
+                # implicit z-anonymity: solid full-intensity
+                subset_z = subset_log[
+                    (subset_log['anom_alg'] == 'z-anonymity') &
+                    ((subset_log['explicit'] == False) | (subset_log['explicit'].isna()))
+                ].sort_values('z')
+                if not subset_z.empty:
+                    ax.plot(
+                        subset_z['z'],
+                        subset_z[metric],
+                        linestyle='-',
+                        alpha=1.0,
+                        marker=None,
+                        color=color,
+                    )
 
-            # vertical padding so 0 and 1 lines are distinct
+                # baseline implicit only: solid, faded
+                subset_baseline = subset_log[
+                    (subset_log['anom_alg'] == 'baseline') &
+                    ((subset_log['explicit'] == False) | (subset_log['explicit'].isna()))
+                ].sort_values('z')
+                if not subset_baseline.empty:
+                    ax.plot(
+                        subset_baseline['z'],
+                        subset_baseline[metric],
+                        linestyle='-',
+                        alpha=0.3,
+                        marker=None,
+                        color=color,
+                    )
+
+                # explicit z-anonymity: dashed
+                subset_z_explicit = subset_log[
+                    (subset_log['anom_alg'] == 'z-anonymity') &
+                    (subset_log['explicit'] == True)
+                ].sort_values('z')
+                if not subset_z_explicit.empty:
+                    ax.plot(
+                        subset_z_explicit['z'],
+                        subset_z_explicit[metric],
+                        linestyle='--',
+                        alpha=1.0,
+                        marker=None,
+                        color=color,
+                    )
+
             ax.set_ylim(-0.02, 1.02)
 
             if i == 0:
-                ax.set_title(f"ngram_size={ngram}")
+                ax.set_title(f"ngram_size={ngram}", fontsize=10)
             if j == 0:
-                ax.set_ylabel(display_names.get(metric, metric))
+                label = display_names.get(metric, metric)
+                wrapped = _wrap_label(label, max_len=22)
+                ax.set_ylabel(wrapped, fontsize=13)
             else:
                 ax.set_ylabel('')
-            ax.set_xlabel('z')
-
-            if i == 0 and j == 0:
-                ax.legend(fontsize='small')
-            else:
-                if ax.get_legend():
-                    ax.get_legend().remove()
+            ax.set_xlabel('z', fontsize=10)
             ax.grid(True, linestyle=':', linewidth=0.5)
 
-    plt.suptitle(f"Comparison for log '{log_name}'", y=1.02)
-    plt.tight_layout()
+    # --- single compact legend: one row per log (z-anonymity, explicit z-anonymity, baseline) ---
+    fig.subplots_adjust(top=0.92)  # keep legend close to plots
 
-    base_name = f"{log_name}_comparison"
-    pdf_path = get_figure_output_path(log_name, f"{base_name}.pdf")
-    fig.savefig(pdf_path, dpi=300, bbox_inches='tight', format='pdf')
+    legend_handles = []
+    legend_labels = []
+    for log in log_names:
+        color = log_color[log]
+        # add in exact order per log
+        handle_z = Line2D([0], [0], color=color, linestyle='-', linewidth=2, alpha=1.0)
+        handle_explicit_z = Line2D([0], [0], color=color, linestyle='--', linewidth=2, alpha=1.0)
+        handle_baseline = Line2D([0], [0], color=color, linestyle='-', linewidth=2, alpha=0.3)
+        legend_handles.extend([handle_z, handle_explicit_z, handle_baseline])
+        legend_labels.extend([
+            f"{log}: z-anonymity",
+            f"{log}: explicit z-anonymity",
+            f"{log}: baseline",
+        ])
+
+    fig.legend(
+        legend_handles,
+        legend_labels,
+        loc='upper center',
+        bbox_to_anchor=(0.5, 0.97),
+        ncol=3,
+        fontsize=12,
+        frameon=True,
+        handlelength=2.5,
+        handletextpad=0.5,
+        labelspacing=0.3,
+        columnspacing=0.8,
+        fancybox=False,
+        edgecolor='black',
+        borderpad=0.3,
+    )
+
+    plt.tight_layout(rect=[0, 0, 1, 0.90])
+
+    base_name = f"{'_'.join(log_names)}_comparison"
+    pdf_path = get_figure_output_path(base_name, f"{base_name}.pdf")
+    fig.savefig(pdf_path, dpi=300, bbox_inches='tight', pad_inches=0.2, format='pdf')
     print(f"[INFO] Saved comparison PDF to: {pdf_path}")
     if save_png:
-        png_path = get_figure_output_path(log_name, f"{base_name}.png")
-        fig.savefig(png_path, dpi=300, bbox_inches='tight', format='png')
+        png_path = get_figure_output_path(base_name, f"{base_name}.png")
+        fig.savefig(png_path, dpi=300, bbox_inches='tight', pad_inches=0.2, format='png')
         print(f"[INFO] Saved comparison PNG to: {png_path}")
     return fig
 
 
-
-def visualize_all_results_for_log(log_name, result_dir=None, save_png=False):
-    if result_dir:
-        json_dir = pathlib.Path(result_dir) / log_name
-    else:
-        json_dir = OUTPUT_DIR / log_name
-    print(f"[DEBUG] Looking for result JSONs in: {json_dir}")
-    json_paths = sorted([str(p) for p in json_dir.glob("results*.json")])
-    if not json_paths:
-        existing = list(json_dir.iterdir()) if json_dir.exists() else []
-        if existing:
-            print(f"[DEBUG] Files present in {json_dir}: {[p.name for p in existing][:30]}")
+def visualize_multiple_logs(log_names, result_dir=None, save_png=False):
+    all_dfs = []
+    for log_name in log_names:
+        if result_dir:
+            json_dir = pathlib.Path(result_dir) / log_name
         else:
-            print(f"[DEBUG] Directory missing or empty: {json_dir}")
-        raise FileNotFoundError(f"No result JSONs found for log '{log_name}' at {json_dir}")
-    df = load_and_flatten_results(json_paths)
-    fig = plot_z_vs_baseline_and_save(df, log_name=log_name, save_png=save_png)
+            json_dir = OUTPUT_DIR / log_name
+        print(f"[DEBUG] Looking for result JSONs in: {json_dir}")
+        json_paths = sorted([str(p) for p in json_dir.glob("results*.json")])
+        if not json_paths:
+            existing = list(json_dir.iterdir()) if json_dir.exists() else []
+            if existing:
+                print(f"[DEBUG] Files present in {json_dir}: {[p.name for p in existing][:30]}")
+            else:
+                print(f"[DEBUG] Directory missing or empty: {json_dir}")
+            raise FileNotFoundError(f"No result JSONs found for log '{log_name}' at {json_dir}")
+        df_log = load_and_flatten_results(json_paths, log_name)
+        all_dfs.append(df_log)
+
+    combined = pd.concat(all_dfs, ignore_index=True)
+    fig = plot_z_vs_baseline_and_save(combined, aggregate_name="_".join(log_names), save_png=save_png)
     plt.show()
-    return df, fig
+    return combined, fig
 
 
 # === configuration, hardcoded ===
-LOG_NAME = "Sepsis"  # change to whichever log directory you want to visualize
-RESULT_DIR = None  # e.g., "/Users/henrikkirchmann/z_anonymity_pm/data/output" if overriding
-SAVE_PNG = False  # set True if you want PNG alongside PDF
+LOG_NAMES = ["env_permit", "Sepsis"]  # e.g., ["Sepsis", "env_permit"]
+RESULT_DIR = None  # override if needed
+SAVE_PNG = False  # set True to get PNG as well
 
-# run visualization
 if __name__ == "__main__":
-    df, fig = visualize_all_results_for_log(LOG_NAME, result_dir=RESULT_DIR, save_png=SAVE_PNG)
+    df, fig = visualize_multiple_logs(LOG_NAMES, result_dir=RESULT_DIR, save_png=SAVE_PNG)

@@ -106,7 +106,7 @@ def _run_single_task(args):
         elif algorithm != 'baseline':
             projection_base = 'A_list*'
         else:
-            projection_base = None
+            projection_base = 'A_list*'
 
         if projection_base is not None:
             reid_risk = calculate_reidentification_risk(
