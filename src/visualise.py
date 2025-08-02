@@ -254,7 +254,7 @@ def visualize_all_results_for_log(log_name, result_dir=None, save_png=False):
 
 
 # === configuration, hardcoded ===
-LOG_NAME = "Sepsis"  # change to whichever log directory you want to visualize
+LOG_NAME = "BPIC12"  # change to whichever log directory you want to visualize
 RESULT_DIR = None  # e.g., "/Users/henrikkirchmann/z_anonymity_pm/data/output" if overriding
 SAVE_PNG = False  # set True if you want PNG alongside PDF
 

@@ -19,7 +19,7 @@ from src.evaluation.reidentification_risk import calculate_reidentification_risk
 
 # Constants
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-EVENT_LOG_PATH = Path(os.path.join(SCRIPT_DIR, '../data/input1/')).resolve()
+EVENT_LOG_PATH = Path(os.path.join(SCRIPT_DIR, '../data/input/')).resolve()
 
 # Globals for worker caching
 _worker_original_log = None
@@ -102,9 +102,9 @@ def _run_single_task(args):
     else:
         # Determine base projection
         if algorithm != 'baseline' and mode == 'ngram':
-            projection_base = 'N'
+            projection_base = 'A_list*'
         elif algorithm != 'baseline':
-            projection_base = 'E'
+            projection_base = 'A_list*'
         else:
             projection_base = None
 
@@ -119,10 +119,12 @@ def _run_single_task(args):
             )
             reidentification_protection = 1 - reid_risk['risk_metrics']['mean']
 
+        ''' 
         reid_risk_A_star = calculate_reidentification_risk(
             anonymized_log, projection='A_list*', ngram_size=ngram_size, seed=seed
         )
         reidentification_protection_A_star = 1 - reid_risk_A_star['risk_metrics']['mean']
+        '''
 
     result = {
         'parameters': {
@@ -136,8 +138,7 @@ def _run_single_task(args):
         'anonymized_log_stats': anonymized_log_stats,
         'ratio_of_remaining_directly_follows': ratio_of_remaining_directly_follows,
         'fitness': fitness,
-        'reidentification_protection': reidentification_protection,
-        'reidentification_protection_A_star': reidentification_protection_A_star
+        'reidentification_protection': reidentification_protection
     }
     return result
 
@@ -226,7 +227,7 @@ def main():
         TIME_WINDOWS = [259200]  # 24h in seconds
         Z_VALUES = list(range(1, 31))
         for mode in ['ngram']:  # you can add 'single' if desired
-            for ngram_size in [1, 2, 3, 5, 7]:
+            for ngram_size in [1, 2, 3]:
                 for explicit in [False, True]:
                     print(
                         f"\nTesting z-anonymity for {log_name} | "

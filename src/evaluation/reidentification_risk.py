@@ -131,7 +131,7 @@ def detailed_counts_projection_A(traces_act, traces_time, number_points, seed=No
 
 def calculate_reidentification_risk(
     log: EventLog,
-    projection: str = 'N',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps, 'A_list' = list-based A, 'A*'/'A_list*' = day-granular variants
+    projection: str = 'A_list*',  # 'N' = n-gram, 'E' = activities only, 'A' = activities + timestamps, 'A_list' = list-based A, 'A*'/'A_list*' = day-granular variants
     number_points: float = 5,  # >=1 absolute, <1 fraction (also governs number of n-grams in N)
     repetitions: int = 10,
     seed: int | None = None,
