@@ -89,7 +89,6 @@ def load_and_flatten_results(json_paths):
             else:
                 base['reidentification_protection'] = None
 
-            base['reidentification_protection_A_star'] = r.get('reidentification_protection_A_star')
 
             stats = r.get('anonymized_log_stats', {}) or {}
             base['event_removal_rate'] = stats.get('event_removal_rate')
@@ -104,16 +103,14 @@ def plot_z_vs_baseline_and_save(df, log_name, save_png=False):
         'trace_removal_rate',
         'ratio_of_remaining_directly_follows',
         'fitness',
-        'reidentification_protection',
-        'reidentification_protection_A_star',
+        'reidentification_protection'
     ]
     display_names = {
         'event_removal_rate': 'Ratio of remaining events',
         'trace_removal_rate': 'Ratio of remaining traces',
         'ratio_of_remaining_directly_follows': 'Ratio of remaining directly follows',
         'fitness': 'Fitness',
-        'reidentification_protection': 'Reidentification protection',
-        'reidentification_protection_A_star': 'Reidentification protection A*',
+        'reidentification_protection': 'Reidentification protection'
     }
 
     df = df[df['anom_alg'].isin(['z-anonymity', 'baseline'])].copy()
@@ -254,7 +251,7 @@ def visualize_all_results_for_log(log_name, result_dir=None, save_png=False):
 
 
 # === configuration, hardcoded ===
-LOG_NAME = "BPIC12"  # change to whichever log directory you want to visualize
+LOG_NAME = "Sepsis"  # change to whichever log directory you want to visualize
 RESULT_DIR = None  # e.g., "/Users/henrikkirchmann/z_anonymity_pm/data/output" if overriding
 SAVE_PNG = False  # set True if you want PNG alongside PDF
 
