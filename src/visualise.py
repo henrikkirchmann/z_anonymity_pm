@@ -266,7 +266,7 @@ def visualize_multiple_logs(log_names, result_dir=None, save_png=False):
 
 
 # === configuration, hardcoded ===
-LOG_NAMES = ["env_permit", "Sepsis"]  # e.g., ["Sepsis", "env_permit"]
+LOG_NAMES = ["env_permit", "Sepsis", "BPIC_2012_O", "BPIC20_PTC"]  # e.g., ["Sepsis", "env_permit"]
 RESULT_DIR = None  # override if needed
 SAVE_PNG = False  # set True to get PNG as well
 
