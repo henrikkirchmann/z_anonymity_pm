@@ -19,22 +19,22 @@ z_anonymity_pm/
 │   │   ├── Sepsis.xes.gz              # Sepsis Cases dataset  
 │   │   ├── BPI_Challenge_2012_O.xes.gz # BPI Challenge 2012 (Offers)
 │   │   └── BPIC20_PrepaidTravelCost.xes.gz # BPI Challenge 2020
-│   └── output/                   # Experimental results and generated figures
-│       ├── env_permit/           # Results for Environmental Permit dataset
-│       ├── Sepsis/               # Results for Sepsis dataset
-│       ├── BPIC_2012_O/          # Results for BPI Challenge 2012 dataset
-│       ├── BPIC20_PTC/           # Results for BPI Challenge 2020 dataset
-│       └── figures/              # Generated comparison plots and visualizations
+│   └── output/                   # Experimental results for each event log and generated figures
+│       ├── env_permit/           
+│       ├── Sepsis/               
+│       ├── BPIC_2012_O/          
+│       ├── BPIC20_PTC/           
+│       └── figures/              # Generated figures
 ├── src/
 │   ├── anonymization/            # Anonymization algorithm implementations
-│   │   ├── z_anonymity.py            # Standard z-anonymity (ngram_z_anonymity.py with n =1)
-│   │   ├── ngram_z_anonymity.py      # N-gram based z-anonymity 
-│   │   └── baseline.py               # Baseline anonymization
+│   │   ├── z_anonymity.py            # Standard z-anonymity (this also implemented as ngram_z_anonymity.py with n =1)
+│   │   ├── ngram_z_anonymity.py      # N-gram based z-anonymity (what we use in the paper)
+│   │   └── baseline.py               # Baseline anonymization (also used in the paper)
 │   ├── evaluation/               # Privacy and utility metrics
-│   │   ├── metrics.py                # Core evaluation metrics
-│   │   ├── reidentification_risk.py  # Privacy risk assessment
-│   │   ├── follows_relations.py      # Utility preservation metrics
-│   │   └── event_log_stats.py        # Statistical analysis
+│   │   ├── metrics.py                # Ratio of remaining directly follows relations and fitness valus
+│   │   ├── reidentification_risk.py  # Reidentification protection
+│   │   ├── follows_relations.py      # F1 scores of follow relations (not used for the paper)
+│   │   └── event_log_stats.py        # Ratio of remaining events and traces
 │   ├── utils/                    # Helper utilities
 │   │   └── log_utils.py              # Event log processing utilities
 │   ├── test_z_anonymity.py       # Main experimental script
@@ -49,14 +49,6 @@ z_anonymity_pm/
 Make sure you are using **Python 3.11** to run the scripts.
 
 Install all required packages using the [`requirements.txt`](requirements.txt) file.
-
-
-### Dataset Preparation
-
-1. Download the datasets in XES format from the provided sources
-2. Compress them using gzip (`.xes.gz` format)
-3. Place them in the `data/input/` directory with the exact names shown above
-
 
 ## Reproducing Paper Experiments
 
@@ -78,6 +70,14 @@ This script will:
 ### Experimental Configuration
 
 **Paper Methodology**: The experiments simulate distributed event streams by treating each distinct `org:resource` (or `org:group` for Sepsis) as an originating stream, modeling the event logs as collections of distributed, concurrent data streams.
+
+The evaluation workflow:
+1. **Data Loading**: Loads event logs from `data/input/`
+2. **Source Simulation**: Partitions logs by `org:resource`/`org:group` 
+3. **Filtering**: Applies z-anonymity algorithms to each source independently
+4. **Reassembly**: Combines filtered streams preserving trace order
+5. **Metric Calculation**: Computes privacy and utility metrics
+6. **Results Storage**: Saves detailed results as JSON files in `data/output/`
 
 The experiments use the following parameters:
 - **Z-values**: 1 to 30 (sweeping anonymity parameter)
@@ -105,80 +105,8 @@ python src/test_z_anonymity.py
 python src/visualise.py
 ```
 
-#### 3. Custom Evaluation
-```python
-# For individual dataset evaluation
-from src.test_z_anonymity import test_different_z_values_with_pool
 
-# Example: Run evaluation for specific parameters
-test_different_z_values_with_pool(
-    log_path="data/input/Sepsis.xes.gz",
-    time_windows=[259200],  # 72 hours
-    z_values=[1, 5, 10, 15, 20, 25, 30],
-    mode='ngram',
-    ngram_size=2,
-    explicit=True,
-    source_attribute='org:group',  # 'org:resource' for other datasets
-    log_name="Sepsis",
-    seed=42
-)
-```
-
-The evaluation workflow:
-1. **Data Loading**: Loads event logs from `data/input/`
-2. **Source Simulation**: Partitions logs by `org:resource`/`org:group` 
-3. **Filtering**: Applies z-anonymity algorithms to each source independently
-4. **Reassembly**: Combines filtered streams preserving trace order
-5. **Metric Calculation**: Computes privacy and utility metrics
-6. **Results Storage**: Saves detailed results as JSON files in `data/output/`
-
-### From Event Logs to Distributed Streams
-
-The evaluation transforms centralized event logs into distributed streaming scenarios:
-1. **Source Partitioning**: Each `org:resource`/`org:group` becomes a separate event source
-2. **Stream Filtering**: Each source applies (explicit) z-anonymity independently  
-3. **Stream Reassembly**: Filtered events are recombined preserving original trace ordering
-4. **Evaluation**: Anonymized logs are compared against originals using privacy and utility metrics
-
-### Running Individual Dataset Experiments
-
-For testing a specific dataset:
-
-```python
-from src.test_z_anonymity import test_different_z_values_with_pool
-
-# Example for Sepsis dataset
-test_different_z_values_with_pool(
-    log_path="data/input/Sepsis.xes.gz",
-    time_windows=[259200],
-    z_values=list(range(1, 31)),
-    mode='ngram',
-    ngram_size=3,
-    explicit=False,
-    source_attribute='org:group',  # Note: Sepsis uses 'org:group'
-    log_name="Sepsis",
-    cores_to_use=4,
-    seed=42
-)
-
-# For other datasets, use 'org:resource' as source_attribute
-```
-
-## Generating Visualizations
-
-To create the comparison plots and visualizations shown in the paper:
-
-```bash
-python src/visualise.py
-```
-
-This will:
-1. Load experimental results from all four datasets
-2. Generate comprehensive comparison plots
-3. Save figures to `data/output/figures/`
-4. Display interactive plots for analysis
-
-### Customizing Visualizations
+**Customizing Visualizations**
 
 You can modify the visualization configuration in `src/visualise.py`:
 
@@ -201,7 +129,6 @@ Following the paper's methodology, the implementation evaluates both privacy and
 - **Methodology**: Samples k = ⌈0.1 × max_trace_length⌉ activity-timestamp pairs with day-granular timestamps
 - **Assessment**: Measures fraction of traces that remain uniquely identifiable 
 - **Protection Score**: Protection = 1 - (fraction of unique traces) 
-- **Usage**: Called in [`src/test_z_anonymity.py`](src/test_z_anonymity.py) (lines 112-120)
 - **Interpretation**: Higher values indicate stronger protection against re-identification attacks
 
 ### Utility Metrics
@@ -211,21 +138,12 @@ Following the paper's methodology, the implementation evaluates both privacy and
   - Function: `get_event_log_stats()` (lines 1-14)
 - **Ratio of Remaining Events (RRE)**: `event_removal_rate` - Fraction of original events retained after filtering
 - **Ratio of Remaining Traces (RRT)**: `trace_removal_rate` - Fraction of original traces retained after filtering
-- **Usage**: Called in [`src/test_z_anonymity.py`](src/test_z_anonymity.py) (line 95)
 
 #### Behavioral Preservation Metrics  
 - **Implementation**: [`src/evaluation/metrics.py`](src/evaluation/metrics.py)
-  - **Directly-Follows Relations**: `get_ratio_of_remaining_directly_follows()` (lines 190-203)
-    - Helper function: `get_directly_follows_relations()` (lines 174-187)
-  - **Fitness Score**: `compute_fitness()` (lines 206-229)
 - **Preservation of Directly-Follows Relations (RDF)**: Fraction of original directly-follows relations preserved
 - **Fitness**: Conformance score of anonymized log against process model discovered from original log using inductive miner and token-based replay
-- **Usage**: Called in [`src/test_z_anonymity.py`](src/test_z_anonymity.py) (lines 96-97)
 
-#### Key Findings from Paper
-- **Non-linear Dependencies**: Privacy and utility show non-linear relationships, creating opportunities for favorable trade-offs
-- **Dataset Variability**: Different datasets exhibit varying sensitivity to anonymization parameters
-- **Explicit vs. Standard**: Explicit z-anonymity generally preserves more utility while providing comparable privacy protection
 
 ## Results Structure
 
