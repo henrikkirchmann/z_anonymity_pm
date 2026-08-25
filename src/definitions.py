@@ -44,7 +44,7 @@ PROJECT_ROOT = find_project_root()
 # Data directories
 DATA_DIR = PROJECT_ROOT / 'data'
 INPUT_DIR = DATA_DIR / 'input'
-OUTPUT_DIR = DATA_DIR / 'output'
+OUTPUT_DIR = DATA_DIR / 'output_f'
 
 # Source code directory
 SRC_DIR = PROJECT_ROOT / 'src'
@@ -60,7 +60,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 def get_output_path(filename: str, log_name: str) -> Path:
     log_output_path = OUTPUT_DIR / log_name
     log_output_path.mkdir(parents=True, exist_ok=True)
-    """Get absolute path for an output file."""
+    """Get absolute path for an output_f file."""
     return log_output_path / filename
 
 def get_input_path(filename: str) -> Path:

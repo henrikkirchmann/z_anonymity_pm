@@ -217,6 +217,3 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Input and Output Folders
-data/input
-data/output

@@ -81,7 +81,7 @@ The evaluation workflow:
 
 The experiments use the following parameters:
 - **Z-values**: 1 to 30 (sweeping anonymity parameter)
-- **Time windows**: 259,200 seconds (72 hours/3 days)
+- **Time windows**: 4 h, 24 h, 48 h, and 72 h (14,400 / 86,400 / 172,800 / 259,200 seconds)
 - **Behavioral Predicates**: Activity sequences of length 1, 2, and 3
 - **Algorithms**: Standard z-anonymity, explicit z-anonymity, and centralized baseline
 - **Parallelization**: Uses 80% of available CPU cores for efficiency
@@ -92,10 +92,10 @@ The experiments use the following parameters:
 
 Two top-level flags at the top of `main()` in [`src/test_z_anonymity.py`](src/test_z_anonymity.py) control the conformance-checking strategy and the parallelism mode:
 
-| Flag | Default | Effect |
-|---|---|---|
-| `ALIGNMENT_BASED` | `True` | When `True`, fitness and precision are computed via **alignment-based** conformance checking (more accurate, slower). When `False`, the faster **token-based replay** is used instead. |
-| `TASK_INTERNAL_MULTI_PROCESSING` | `True` | When `True`, tasks run **sequentially** and pm4py's own internal thread pool is free to use all CPU cores (good for single-machine, alignment-heavy runs); the **re-identification risk assessment** also runs in parallel (`n_jobs=cpu_count()`). When `False`, an outer `multiprocessing.Pool` spawns one worker process per task in parallel, with pm4py internal parallelism and risk assessment both capped at a single thread per worker (`n_jobs=1`) to avoid nested process spawning. |
+| Flag | Default | Effect                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|---|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ALIGNMENT_BASED` | `True` | When `True`, fitness and precision are computed via alignment-based conformance checking. When `False` **token-based replay** is used instead.|
+| `TASK_INTERNAL_MULTI_PROCESSING` | `True` | When `True`, tasks run sequentially and pm4py's own internal thread pool is free to use all CPU cores, the re-identification risk assessment also runs in parallel (`n_jobs=cpu_count()`). When `False`, an outer `multiprocessing.Pool` spawns one worker process per task in parallel, with pm4py internal parallelism and risk assessment both capped at a single thread per worker (`n_jobs=1`) to avoid nested process spawning. |
 
 
 ### Running the Evaluation

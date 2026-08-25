@@ -254,7 +254,10 @@ def compute_precision(
 
         return precision_token_based_replay(anonymized_log, net, im, fm)
 
-    except Exception:
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] compute_precision failed: {e}")
+        traceback.print_exc()
         return None
 
 def discover_model(log: EventLog, muli_processing=False) -> Optional[tuple[PetriNet, Marking, Marking]]:
@@ -281,46 +284,35 @@ def compute_quality_metrics(
 ) -> Tuple[Optional[float], Optional[float], Optional[float], Optional[float]]:
 
     if len(anonymized_log) == 0:
-        print("no anonymized log")
-        print(anonymized_log)
         return None, None, None, None
 
     try:
-        print("[DEBUG]: Started computing quality metrics")
         # Discover model using anonymized log
         model = discover_model(anonymized_log, multi_processing)
-        print("[DEBUG]: Finished computing model")
 
         if model is None:
             return None, None, None, None
         net, im, fm = model
 
         # compute fitness of the model against anonymized log
-        # fitness = compute_fitness(reference_log, net, im, fm, alignment_based, multi_processing)
-        print("[DEBUG]: Finished computing fitness")
+        fitness = compute_fitness(reference_log, net, im, fm, alignment_based, multi_processing)
 
         # compute precision of the model against anonymized log
         precision = compute_precision(reference_log, net, im, fm, alignment_based, multi_processing)
-        print("[DEBUG]: Finished computing precision")
-        # model = discover_model(anonymized_log, multi_processing)
-        # if model is None:
-        #     return fitness, precision, None, None
-
-        # net, im, fm = model
 
         # compute generalization
-        # generalization = compute_generality(reference_log, net, im, fm)
-        print("[DEBUG]: Finished computing generalization")
+        generalization = compute_generality(reference_log, net, im, fm)
 
         # compute simplicity of 'anonymized model'
-        # simplicity = compute_simplicity(net, im, fm)
-        print("[DEBUG]: Finished computing Simplicity")
+        simplicity = compute_simplicity(net, im, fm)
 
 
 
-        # return fitness, precision, generalization, simplicity
-        return precision
+        return fitness, precision, generalization, simplicity
 
-    except Exception:
+    except Exception as e:
+        import traceback
+        print(f"[ERROR] compute_quality_metrics failed: {e}")
+        traceback.print_exc()
         return None, None, None, None
 

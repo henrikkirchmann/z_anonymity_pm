@@ -115,32 +115,20 @@ def _execute_task(
                 original_log, z, time_window if time_window is not None else 0, ngram_size, explicit, source_attribute
             )
 
-    # anonymized_log_stats = get_event_log_stats(original_log, anonymized_log, number_of_edited_traces)
-    print("[DEBUG]: Finished computing anonymized log stats")
+    anonymized_log_stats = get_event_log_stats(original_log, anonymized_log, number_of_edited_traces)
     ratio_of_remaining_directly_follows = get_ratio_of_remaining_directly_follows(original_log, anonymized_log)
-    print("[DEBUG]: Finished computing ratio of remaining directly follows")
-    # compute the quality metrics – multiprocessing flag controls internal pm4py parallelism
-    # fitness, precision, generalization, simplicity = compute_quality_metrics(original_log, anonymized_log, alignment_based, use_multiprocessing)
-    precision = compute_quality_metrics(original_log, anonymized_log, alignment_based, use_multiprocessing)
-    print("[DEBUG]: Finished computing quality metrics")
-    # if len(anonymized_log) == 0:
-    #     reidentification_protection = None
-    #     print("[DEBUG]: RISK is None")
-    # else:
-    #     # Determine base projection
-    #     projection_base = 'A_list*'
-    #
-    #     # When running sequentially (use_multiprocessing=True), pm4py is done here
-    #     # and all cores are free → use them for the risk calculation.
-    #     # In Pool mode the outer pool owns the cores, so keep n_jobs=1 to avoid
-    #     # nested process explosion.
-    #     n_jobs_risk = multiprocessing.cpu_count() if use_multiprocessing else 1
-    #     reid_risk = calculate_reidentification_risk(
-    #         anonymized_log, projection=projection_base, ngram_size=ngram_size,
-    #         seed=seed, n_jobs=n_jobs_risk
-    #     )
-    #     print("[DEBUG]: Finished computing RISK")
-    #     reidentification_protection = 1 - reid_risk['risk_metrics']['mean']
+    fitness, precision, generalization, simplicity = compute_quality_metrics(original_log, anonymized_log, alignment_based, use_multiprocessing)
+    if len(anonymized_log) == 0:
+        reidentification_protection = None
+    else:
+        # Determine base projection
+        projection_base = 'A_list*'
+        n_jobs_risk = multiprocessing.cpu_count() if use_multiprocessing else 1
+        reid_risk = calculate_reidentification_risk(
+            anonymized_log, projection=projection_base, ngram_size=ngram_size,
+            seed=seed, n_jobs=n_jobs_risk
+        )
+        reidentification_protection = 1 - reid_risk['risk_metrics']['mean']
 
     result = {
         'parameters': {
@@ -151,20 +139,19 @@ def _execute_task(
             'ngram_size': ngram_size if mode == 'ngram' else None,
             'explicit': explicit
         },
-        # 'anonymized_log_stats': anonymized_log_stats,
-        # 'ratio_of_remaining_directly_follows': ratio_of_remaining_directly_follows,
-        # 'fitness': fitness,
+        'anonymized_log_stats': anonymized_log_stats,
+        'ratio_of_remaining_directly_follows': ratio_of_remaining_directly_follows,
+        'fitness': fitness,
         'precision': precision,
-        # 'generalization': generalization,
-        # 'simplicity': simplicity,
-        # 'reidentification_protection': reidentification_protection
+        'generalization': generalization,
+        'simplicity': simplicity,
+        'reidentification_protection': reidentification_protection
     }
     return result
 
 
 def _flush_results(results: list, output_path: str) -> None:
     """Serialize and write current results list to disk."""
-    print("[DEBUG]: About to flush results.")
     serializable_results = convert_to_serializable(results)
     with open(output_path, 'w') as f:
         json.dump(serializable_results, f, indent=2)
@@ -232,10 +219,6 @@ def test_different_z_values_with_pool(
         # (alignment computation, process discovery) can utilise
         # all available cores without contention.
         # -------------------------------------------------------
-        print(
-            f"[multi_processing=True] Running {len(tasks)} tasks sequentially; "
-            "pm4py internal parallelism enabled."
-        )
         original_log = load_event_log(log_path)
         for i, task in enumerate(tasks, 1):
             print(
@@ -280,13 +263,13 @@ def test_different_z_values_with_pool(
 
 def main():
     # ── Runtime flags ────────────────────────────────────────────────────────
-    # True  → alignment-based fitness/precision (accurate, slow)
-    # False → token-based replay (fast, approximate)
+    # True  : alignment-based fitness/precision (accurate, slow)
+    # False : token-based replay (fast, approximate)
     ALIGNMENT_BASED: bool = True
 
-    # True  → sequential outer loop, pm4py internal parallelism enabled
+    # True  : sequential outer loop, pm4py internal parallelism enabled
     #         (recommended when ALIGNMENT_BASED=True)
-    # False → outer multiprocessing.Pool (one process per task),
+    # False : outer multiprocessing.Pool (one process per task),
     #         pm4py internal parallelism disabled inside workers
     #         (recommended when ALIGNMENT_BASED=False / token-based)
     TASK_INTERNAL_MULTI_PROCESSING: bool = True
@@ -300,8 +283,7 @@ def main():
         else:
             source_attribute = 'org:resource'
 
-        # BPIC17 is too large for alignment-based conformance checking;
-        # force token-based replay regardless of the global flag.
+        
         alignment_based_for_log = False if log_name == 'BPIC17' else ALIGNMENT_BASED
 
         full_path = os.path.join(EVENT_LOG_PATH, raw_log)
