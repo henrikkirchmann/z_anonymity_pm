@@ -24,7 +24,7 @@ except Exception:  # pragma: no cover
             raise RuntimeError("Could not find project root.")
         return find_project_root(current_path.parent)
     PROJECT_ROOT = find_project_root(pathlib.Path(__file__).resolve())
-    OUTPUT_DIR = PROJECT_ROOT / 'data' / 'output'
+    OUTPUT_DIR = PROJECT_ROOT / 'data' / 'output_f'
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
